@@ -11,6 +11,7 @@ from .serializers import (
     ClusterSerializer,
     AuditLogSerializer,
 )
+from api.neo4j_service import Neo4jService
 
 
 @api_view(["GET"])
@@ -45,3 +46,28 @@ class ClusterViewSet(viewsets.ModelViewSet):
 class AuditLogViewSet(viewsets.ModelViewSet):
     queryset = AuditLog.objects.all()
     serializer_class = AuditLogSerializer
+
+
+
+"This api endpoint will be used by the frontend to fetch graph data for visualization. It queries Neo4j for accounts and their follow relationships, and returns them in a format suitable for rendering with libraries like D3.js or Vis.js."
+@api_view(["GET"])
+def graph_data(request):
+    nodes_result = Neo4jService.run_query("""
+        MATCH (a:Account)
+        RETURN a.id AS id,
+               a.username AS username,
+               a.account_type AS account_type,
+               a.follower_count AS follower_count
+        LIMIT 500
+    """)
+
+    edges_result = Neo4jService.run_query("""
+        MATCH (a:Account)-[:FOLLOWS]->(b:Account)
+        RETURN a.id AS source, b.id AS target
+        LIMIT 2000
+    """)
+
+    return Response({
+        "nodes": nodes_result,
+        "edges": edges_result
+    })
