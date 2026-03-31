@@ -9,3 +9,6 @@ redis==5.2.1
 neo4j==5.28.1
 django-filter==25.2
 faker==37.1.0
+networkx==3.4.2
+pandas==2.2.3
+scipy==1.15.2

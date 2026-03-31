@@ -59,7 +59,9 @@ def graph_data(request):
                a.account_type AS account_type,
                a.follower_count AS follower_count
         LIMIT 500
-    """)
+    """
+        
+        )
 
     edges_result = Neo4jService.run_query("""
         MATCH (a:Account)-[:FOLLOWS]->(b:Account)
