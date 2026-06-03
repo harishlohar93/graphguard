@@ -16,6 +16,7 @@ backend/media/
 # ML
 ml/models/*.pkl
 ml/data/
+backend/models/*.pkl
 
 # Node
 frontend/node_modules/

@@ -12,3 +12,5 @@ faker==37.1.0
 networkx==3.4.2
 pandas==2.2.3
 scipy==1.15.2
+scikit-learn==1.6.1
+joblib==1.4.2
