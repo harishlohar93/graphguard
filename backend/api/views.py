@@ -12,6 +12,7 @@ from .serializers import (
     AuditLogSerializer,
 )
 from api.neo4j_service import Neo4jService
+from api.scoring_service import ScoringService
 
 
 @api_view(["GET"])
@@ -73,3 +74,28 @@ def graph_data(request):
         "nodes": nodes_result,
         "edges": edges_result
     })
+    
+@api_view(["POST"])
+def score_account(request, account_id):
+    try:
+        result = ScoringService.score_single_account(account_id)
+
+        try:
+            account = Account.objects.get(account_id=result["account_id"])
+            Alert.objects.update_or_create(
+                account=account,
+                defaults={
+                    "score": result["anomaly_score"],
+                    "label": result["label"],
+                    "status": "pending",
+                }
+            )
+        except Account.DoesNotExist:
+            pass
+
+        return Response(result)
+
+    except RuntimeError as e:
+        return Response({"error": str(e)}, status=400)
+    except Exception as e:
+        return Response({"error": f"Unexpected error: {str(e)}"}, status=500)

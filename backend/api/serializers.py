@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Account , Alert , AuditLog, Cluster
 
+
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
@@ -22,3 +23,9 @@ class ClusterSerializer(serializers.ModelSerializer):
         model = Cluster
         fields = '__all__'
         
+        
+class ScoreSerializer(serializers.Serializer):
+    account_id = serializers.CharField()
+    username = serializers.CharField()
+    anomaly_score = serializers.FloatField()
+    label = serializers.CharField()

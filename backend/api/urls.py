@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import AccountViewSet, AlertViewSet, ClusterViewSet, AuditLogViewSet, graph_data
+from .views import AccountViewSet, AlertViewSet, ClusterViewSet, AuditLogViewSet, graph_data, score_account
 
 router = DefaultRouter()
 router.register("accounts", AccountViewSet)
@@ -10,4 +10,5 @@ router.register("auditlogs", AuditLogViewSet)
 
 urlpatterns = router.urls+ [
     path("graph/", graph_data),
+    path("score/<str:account_id>/", score_account),
 ]
