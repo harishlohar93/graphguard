@@ -45,7 +45,7 @@ services:
 
   django:
     build: ./backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: daphne -b 0.0.0.0 -p 8000 graphguard.asgi:application
     volumes:
       - ./backend:/app
     ports:
@@ -57,11 +57,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health/ || exit 1"]
-      interval: 15s
+      interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 5    
+   
 
   celery:
     build: ./backend

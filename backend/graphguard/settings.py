@@ -19,6 +19,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "api.apps.ApiConfig",
     "django_filters",
+    "channels",
+
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "graphguard.wsgi.application"
+ASGI_APPLICATION = "graphguard.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [config("REDIS_URL")],
+        },
+    },
+}
+
 
 DATABASES = {
     "default": dj_database_url.config(
