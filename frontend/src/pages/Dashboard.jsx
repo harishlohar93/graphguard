@@ -24,7 +24,7 @@ function Dashboard() {
   const reviewed = alerts?.filter(a => a.status === "reviewed").length || 0
 
   return (
-    <div className=" bg-sky-950 flex flex-col h-full gap-0">
+    <div className=" bg-[#0B0F19] text-gray-100 flex flex-col h-full gap-0">
       <div className="grid grid-cols-4 border-b border-gray-200">
         <StatCard label="Total accounts" value={accounts?.length || 0} />
         <StatCard label="Flagged" value={flagged} color="text-red-500" />

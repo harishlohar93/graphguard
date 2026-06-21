@@ -1,4 +1,5 @@
 from django.shortcuts import render
+
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -53,27 +54,34 @@ class AuditLogViewSet(viewsets.ModelViewSet):
 "This api endpoint will be used by the frontend to fetch graph data for visualization. It queries Neo4j for accounts and their follow relationships, and returns them in a format suitable for rendering with libraries like D3.js or Vis.js."
 @api_view(["GET"])
 def graph_data(request):
-    nodes_result = Neo4jService.run_query("""
-        MATCH (a:Account)
-        RETURN a.id AS id,
-               a.username AS username,
-               a.account_type AS account_type,
-               a.follower_count AS follower_count
-        LIMIT 500
-    """
-        
-        )
+    try:
+        nodes_result = Neo4jService.run_query("""
+            MATCH (a:Account)
+            RETURN a.id AS id,
+                   a.username AS username,
+                   a.account_type AS account_type,
+                   a.follower_count AS follower_count
+        """)
 
-    edges_result = Neo4jService.run_query("""
-        MATCH (a:Account)-[:FOLLOWS]->(b:Account)
-        RETURN a.id AS source, b.id AS target
-        LIMIT 2000
-    """)
+        edges_result = Neo4jService.run_query("""
+            MATCH (a:Account)-[:FOLLOWS]->(b:Account)
+            RETURN a.id AS source, b.id AS target
+            LIMIT 1500
+        """)
+        alert_map = {}
+        alerts = Alert.objects.select_related("account").all()
+        for alert in alerts:
+            alert_map[alert.account.account_id] = alert.label
 
-    return Response({
-        "nodes": nodes_result,
-        "edges": edges_result
-    })
+        for node in nodes_result:
+            node["label"] = alert_map.get(node["id"], "normal")
+
+        return Response({
+            "nodes": nodes_result,
+            "edges": edges_result
+        })
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
     
 @api_view(["POST"])
 def score_account(request, account_id):
