@@ -53,7 +53,7 @@ class GraphFeatureExtractor:
             in_degree_centrality = nx.in_degree_centrality(self.graph)
 
             print("Computing PageRank...")
-            pagerank = nx.pagerank(self.graph, alpha=0.85)
+            pagerank = nx.pagerank(self.graph, alpha=0.85, max_iter=100, tol=1e-6)
 
             print("Computing clustering coefficient...")
             clustering = nx.clustering(self.graph.to_undirected())

@@ -10,7 +10,6 @@ neo4j==5.28.1
 django-filter==25.2
 networkx==3.4.2
 pandas==2.2.3
-scipy==1.11.4
 scikit-learn==1.6.1
 joblib==1.4.2
 channels==4.2.0
