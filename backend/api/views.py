@@ -126,7 +126,7 @@ def run_setup(request):
         call_command("train_model", stdout=out)
         results["train_model"] = "done"
 
-        call_command("score_all", stdout=out)
+        call_command("storescore_in_db", stdout=out)
         results["score_all"] = "done"
 
         return Response({"status": "setup complete", "results": results})
