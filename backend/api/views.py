@@ -107,3 +107,29 @@ def score_account(request, account_id):
         return Response({"error": str(e)}, status=400)
     except Exception as e:
         return Response({"error": f"Unexpected error: {str(e)}"}, status=500)
+    
+@api_view(["POST"])
+def run_setup(request):
+    secret = request.data.get("secret")
+    if secret != "graphguard-setup-2024":
+        return Response({"error": "unauthorized"}, status=401)
+    
+    try:
+        from django.core.management import call_command
+        import io
+        results = {}
+
+        out = io.StringIO()
+        call_command("sync_accounts", stdout=out)
+        results["sync_accounts"] = "done"
+
+        call_command("train_model", stdout=out)
+        results["train_model"] = "done"
+
+        call_command("score_all", stdout=out)
+        results["score_all"] = "done"
+
+        return Response({"status": "setup complete", "results": results})
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)    
+    
