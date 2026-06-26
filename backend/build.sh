@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+
 echo "Python version: $(python --version)"
 
 echo "Installing dependencies..."
@@ -11,19 +12,19 @@ python manage.py collectstatic --noinput
 echo "Running migrations..."
 python manage.py migrate
 
-echo "Creating superuser..."
-python manage.py createsuperuser --noinput --username admin --email admin@graphguard.com || true
+echo "Seeding Neo4j graph..."
+python manage.py seed_graph
 
-echo "Syncing accounts from Neo4j..."
-python manage.py sync_accounts || true
+echo "Syncing accounts to PostgreSQL..."
+python manage.py sync_accounts
 
-echo "Seeding graph data..."
-python manage.py seed_graph || true
-
-echo "Training model..."
-python manage.py train_model || true
+echo "Training ML model..."
+python manage.py train_model
 
 echo "Scoring all accounts..."
-python manage.py score_all || true
+python manage.py storescore_in_db
+
+echo "Creating superuser..."
+python manage.py createsuperuser --noinput --username admin --email admin@graphguard.com || true
 
 echo "Build complete."
