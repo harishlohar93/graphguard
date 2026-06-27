@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from decouple import config
 import dj_database_url
@@ -86,9 +87,11 @@ CELERY_BROKER_URL = config("REDIS_URL")
 CELERY_RESULT_BACKEND = config("REDIS_URL")
 
 # Neo4j
-NEO4J_URI = config("NEO4J_URI")
-NEO4J_USER = config("NEO4J_USER")
-NEO4J_PASSWORD = config("NEO4J_PASSWORD")
+# Neo4j
+NEO4J_URI = config("NEO4J_URI", default="")
+NEO4J_USER = config("NEO4J_USER", default="neo4j")
+NEO4J_PASSWORD = config("NEO4J_PASSWORD", default="")
+
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
