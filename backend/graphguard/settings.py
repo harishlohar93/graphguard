@@ -75,7 +75,7 @@ DATABASES = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://graphguard-dg7isptdy-harish-lohar.vercel.app"
+    "https://graphguard-git-main-harish-lohar.vercel.app",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
