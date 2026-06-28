@@ -55,30 +55,27 @@ class AuditLogViewSet(viewsets.ModelViewSet):
 @api_view(["GET"])
 def graph_data(request):
     try:
-        nodes_result = Neo4jService.run_query("""
-            MATCH (a:Account)
-            RETURN a.id AS id,
-                   a.username AS username,
-                   a.account_type AS account_type,
-                   a.follower_count AS follower_count
-        """)
+        accounts = Account.objects.all().values(
+            "account_id", "username", "account_type", "follower_count"
+        )
 
-        edges_result = Neo4jService.run_query("""
-            MATCH (a:Account)-[:FOLLOWS]->(b:Account)
-            RETURN a.id AS source, b.id AS target
-            LIMIT 1500
-        """)
         alert_map = {}
-        alerts = Alert.objects.select_related("account").all()
-        for alert in alerts:
+        for alert in Alert.objects.select_related("account").all():
             alert_map[alert.account.account_id] = alert.label
 
-        for node in nodes_result:
-            node["label"] = alert_map.get(node["id"], "normal")
+        nodes = []
+        for acc in accounts:
+            nodes.append({
+                "id": acc["account_id"],
+                "username": acc["username"],
+                "account_type": acc["account_type"],
+                "follower_count": acc["follower_count"],
+                "label": alert_map.get(acc["account_id"], "normal")
+            })
 
         return Response({
-            "nodes": nodes_result,
-            "edges": edges_result
+            "nodes": nodes,
+            "edges": []
         })
     except Exception as e:
         return Response({"error": str(e)}, status=500)
