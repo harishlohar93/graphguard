@@ -275,14 +275,14 @@ Open [http://localhost:8000/admin/](http://localhost:8000/admin/)
 Create `backend/.env`:
 
 ```env
-SECRET_KEY=your-secret-key
+SECRET_KEY=your-django-secret-key-here
 DEBUG=True
-DATABASE_URL=postgres://graphguard:graphguard123@postgres:5432/graphguard
-REDIS_URL=redis://redis:6379/0
-NEO4J_URI=bolt://neo4j:7687
+DATABASE_URL=postgres://USER:PASSWORD@HOST:5432/DB_NAME
+REDIS_URL=redis://localhost:6379/0
+NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
-NEO4J_PASSWORD=graphguard123
-ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0
+NEO4J_PASSWORD=your-neo4j-password
+ALLOWED_HOSTS=localhost,127.0.0.1
 ```
 
 ---
