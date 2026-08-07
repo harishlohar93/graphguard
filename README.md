@@ -1,6 +1,5 @@
 # GraphGuard — Social Graph Anomaly Detector
 
-![GraphGuard Dashboard](https://img.shields.io/badge/status-live-brightgreen) ![Python](https://img.shields.io/badge/python-3.11-blue) ![Django](https://img.shields.io/badge/django-5.2-green) ![React](https://img.shields.io/badge/react-18-61dafb) ![Docker](https://img.shields.io/badge/docker-compose-2496ed)
 
 > A full-stack ML-powered system that detects bot networks, fake accounts, and coordinated inauthentic behaviour in social graphs using Isolation Forest trained on NetworkX graph features.
 
